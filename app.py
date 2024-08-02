@@ -1,6 +1,53 @@
 import streamlit as st
-from main import generate_response
+from dotenv import load_dotenv
+from llama_index.llms.groq import Groq
+from llama_index.core import Settings
+from llama_index.core import SimpleDirectoryReader
+from llama_index.core import VectorStoreIndex
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
+load_dotenv()
+
+llm = Groq(model="llama3-70b-8192", api_key=st.secrets.get("GROQ_API_KEY"))
+
+embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5")
+
+Settings.llm = llm
+Settings.embed_model = embed_model
+
+docs = SimpleDirectoryReader("./data").load_data()
+
+# db = PersistentClient("./chroma")
+# chroma_collection = db.get_or_create_collection("rag_data")
+
+# vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+# storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+# index = VectorStoreIndex.from_vector_store(
+#     vector_store=vector_store,
+#     storage_context=storage_context,
+#     embed_model = embed_model
+# )
+
+index = VectorStoreIndex.from_documents(
+    documents=docs,
+)
+
+engine = index.as_query_engine(
+    llm=llm
+)
+# hyde_engine = TransformQueryEngine(engine, HyDEQueryTransform(include_original=True))
+
+def generate_response(query : str):
+    response = engine.query(query)
+    return response
+
+
+if __name__ == "__main__":
+    print(generate_response("Hi").response)
+
+
+# streamlit app
 st.set_page_config(
     page_title="RAG application using GROQ API",
     page_icon="./assets/ΛV.png",
