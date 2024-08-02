@@ -39,7 +39,7 @@ engine = index.as_query_engine(
 # hyde_engine = TransformQueryEngine(engine, HyDEQueryTransform(include_original=True))
 
 def generate_response(query : str):
-    response = engine.aquery(query)
+    response = engine.query(query)
     return response
 
 
