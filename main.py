@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 # from groq import Groq
 from dotenv import load_dotenv
 from llama_index.llms.groq import Groq
@@ -16,7 +17,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 load_dotenv()
 
-llm = Groq(model="llama3-70b-8192", api_key=os.environ.get("GROQ_API_KEY"))
+llm = Groq(model="llama3-70b-8192", api_key=st.secrets.get("GROQ_API_KEY"))
 
 embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5")
 
