@@ -38,8 +38,8 @@ engine = index.as_query_engine(
 )
 # hyde_engine = TransformQueryEngine(engine, HyDEQueryTransform(include_original=True))
 
-def generate_response(query : str):
-    response = engine.query(query)
+async def generate_response(query : str):
+    response = await engine.aquery(query)
     return response
 
 
