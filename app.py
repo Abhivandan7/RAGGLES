@@ -29,6 +29,10 @@ with option_con.container(border=True):
         label="Follow me on LinkedIn",
         url="www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226"
     )
+    st.link_button(
+        label="Get the Source",
+        url="www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226"
+    )
 with chat_con.container(height= 450, border=True):
     dialogue = st.container(height=400, border=False)
     with dialogue:

@@ -1,16 +1,15 @@
 import os
-from groq import Groq
+# from groq import Groq
 from dotenv import load_dotenv
 from llama_index.llms.groq import Groq
-from sentence_transformers import SentenceTransformer
 from llama_index.core import Settings
 from llama_index.core import SimpleDirectoryReader
 from chromadb import PersistentClient
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.core.query_engine import TransformQueryEngine
-from llama_index.core.indices.query.query_transform import HyDEQueryTransform
+# from llama_index.core.query_engine import TransformQueryEngine
+# from llama_index.core.indices.query.query_transform import HyDEQueryTransform
 # from llama_index.core.query_engine import
 # from llama_ import ch
 
