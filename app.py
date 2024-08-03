@@ -73,12 +73,10 @@ with option_con.container(border=True):
                 This application to be specific is implicitly equipped with a certain data which will serve as the knowledge base for it's retrieval process.
 """)
     st.link_button(
-        label="Follow me on LinkedIn",
-        url="www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226"
+        "Follow me on LinkedIn [link](www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226)"
     )
-    st.link_button(
-        label="Get the Source",
-        url="www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226"
+    st.write(
+       "Get the source code: [link](https://github.com/Abhivandan7/RAGGLES)"
     )
 with chat_con.container(height= 450, border=True):
     dialogue = st.container(height=400, border=False)
