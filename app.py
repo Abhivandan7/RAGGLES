@@ -72,7 +72,7 @@ with option_con.container(border=True):
                 This is a simple RAG application that helps you to query your data.
                 This application to be specific is implicitly equipped with a certain data which will serve as the knowledge base for it's retrieval process.
 """)
-    st.link_button(
+    st.write(
         "Follow me on LinkedIn [link](www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226)"
     )
     st.write(
