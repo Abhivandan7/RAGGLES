@@ -5,6 +5,7 @@ from llama_index.core import Settings
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core import VectorStoreIndex
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+import asyncio
 
 load_dotenv()
 
@@ -38,67 +39,68 @@ engine = index.as_query_engine(
 )
 # hyde_engine = TransformQueryEngine(engine, HyDEQueryTransform(include_original=True))
 
-def generate_response(query : str):
-    response = engine.query(query)
+@st.cache_data
+async def generate_response(query : str):
+    response = await engine.aquery(query)
     return response
+
+async def main():
+    # streamlit app
+    st.set_page_config(
+        page_title="RAG application using GROQ API",
+        page_icon="./assets/ΛV.png",
+        layout="wide"
+    )
+
+    # Initialize the session state
+    if "messages" not in st.session_state:
+        st.session_state.messages = [{"role" : "ai", "content" : "Hi There, how can I help you?"}]
+
+
+    # create the widget hierarchy
+    st.title("RAGGLES", anchor=False)
+    st.write("A personlised RAG Bot for easy access to your data")
+    base_con = st.container(border=False)
+    option_con , chat_con = st.columns([1,1])
+    with option_con.container(border=True):
+        # file_uploader = st.file_uploader(
+        #     label="PDF Uploader",
+        # )
+        st.header("""
+                    This is a simple RAG application that helps you to query your data.
+                    This application to be specific is implicitly equipped with a certain data which will serve as the knowledge base for it's retrieval process.
+    """)
+        st.write(
+            "Follow me on LinkedIn [link](www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226)"
+        )
+        st.write(
+        "Get the source code: [link](https://github.com/Abhivandan7/RAGGLES)"
+        )
+    with chat_con.container(height= 450, border=True):
+        dialogue = st.container(height=400, border=False)
+        with dialogue:
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.write(message["content"])
+            
+            if user_prompt := chat_con.chat_input("Ask me anything...."):
+                
+                # Conversation Logic here
+                with st.spinner(text="Generating Response..."):
+                    response = await generate_response(query=user_prompt).response
+
+                # Display the query and response
+                st.chat_message("user").write(user_prompt)
+                st.chat_message("ai").write(response)
+
+                # Update Session State
+                st.session_state.messages.append(
+                    {"role" : "user", "content" : user_prompt}
+                )
+                st.session_state.messages.append(
+                    {"role" : "ai", "content" : response}
+                )
 
 
 if __name__ == "__main__":
-    print(generate_response("Hi").response)
-
-
-# streamlit app
-st.set_page_config(
-    page_title="RAG application using GROQ API",
-    page_icon="./assets/ΛV.png",
-    layout="wide"
-)
-
-# Initialize the session state
-if "messages" not in st.session_state:
-    st.session_state.messages = [{"role" : "ai", "content" : "Hi There, how can I help you?"}]
-
-
-# create the widget hierarchy
-st.title("RAGGLES", anchor=False)
-st.write("A personlised RAG Bot for easy access to your data")
-base_con = st.container(border=False)
-option_con , chat_con = st.columns([1,1])
-with option_con.container(border=True):
-    # file_uploader = st.file_uploader(
-    #     label="PDF Uploader",
-    # )
-    st.header("""
-                This is a simple RAG application that helps you to query your data.
-                This application to be specific is implicitly equipped with a certain data which will serve as the knowledge base for it's retrieval process.
-""")
-    st.write(
-        "Follow me on LinkedIn [link](www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=abhivandan-radhakrishnan-275a04226)"
-    )
-    st.write(
-       "Get the source code: [link](https://github.com/Abhivandan7/RAGGLES)"
-    )
-with chat_con.container(height= 450, border=True):
-    dialogue = st.container(height=400, border=False)
-    with dialogue:
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
-        
-        if user_prompt := chat_con.chat_input("Ask me anything...."):
-            
-            # Conversation Logic here
-            with st.spinner(text="Generating Response..."):
-                response = generate_response(query=user_prompt).response
-
-            # Display the query and response
-            st.chat_message("user").write(user_prompt)
-            st.chat_message("ai").write(response)
-
-            # Update Session State
-            st.session_state.messages.append(
-                {"role" : "user", "content" : user_prompt}
-            )
-            st.session_state.messages.append(
-                {"role" : "ai", "content" : response}
-            )
+    asyncio.run(main())
